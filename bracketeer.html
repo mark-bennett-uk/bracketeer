@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <title>Bracketeer</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      h1{
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-size: 28px;
+      }
+
+      #input, #output{
+        font-family: 'consolas', 'Courier New', Courier, monospace;
+        font-size: 14px;
+      }
+
+      textarea { 
+        resize: none; 
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>Bracketeer</h1>
+    </header>
+    
+    <main>
+      <input id="input" type="text" size="20" oninput="updateOutput()"><br>
+      <textarea id="output" cols="20"></textarea>
+    </main>
+
+    <footer>
+      <p><a href="https://github.com/mark-bennett-uk/bracketeer">github.com/mark-bennett-uk/bracketeer</a></p>
+    </footer>
+
+    <script>
+      function updateOutput(){
+        var inputString = document.getElementById("input").value;
+        var inputLength = inputString.length;
+        document.getElementById("input").size = inputLength + 5;
+        var output = [""];
+        var line = 0;
+        var upNext = false;
+        for(let i = 0; i < inputLength; i++){
+          if(upNext){
+            line++;
+            if(line > output.length - 1){
+              output.push("");
+            }
+            output[line] = output[line].padEnd(i);
+            upNext = false;
+          }
+          if(inputString.substring(i, i + 1) == "("){
+            upNext = true;
+          }
+          if(inputString.substring(i, i + 1) == ")"){
+            if(line == 0){
+              output.unshift("");
+            }
+            else{
+              line--;
+            }
+            output[line] = output[line].padEnd(i);
+          }
+          output[line] += inputString.substring(i, i + 1); 
+        }
+        document.getElementById("output").value = "";
+        for(let i = 0; i < output.length; i++){
+          document.getElementById("output").value += output[i] + "\n";
+        }
+        document.getElementById("output").style.height = ((output.length + 3) * 18) + "px";
+        document.getElementById("output").cols = inputLength + 3;
+      }
+
+      updateOutput();
+    </script>
+  </body>
+</html>
