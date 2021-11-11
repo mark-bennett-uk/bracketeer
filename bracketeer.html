@@ -37,13 +37,21 @@
 
     <script>
       function updateOutput(){
+        // get value and size of input string
         var inputString = document.getElementById("input").value;
         var inputLength = inputString.length;
+
+        // set size of input text box
         document.getElementById("input").size = inputLength + 5;
+
+        // initialize output array and control variables
         var output = [""];
         var line = 0;
         var upNext = false;
+
+        // step through all characters in input string
         for(let i = 0; i < inputLength; i++){
+          // if last character was ( move up a step
           if(upNext){
             line++;
             if(line > output.length - 1){
@@ -52,9 +60,11 @@
             output[line] = output[line].padEnd(i);
             upNext = false;
           }
+          // if character is (
           if(inputString.substring(i, i + 1) == "("){
             upNext = true;
           }
+          // if character is ) move down a step
           if(inputString.substring(i, i + 1) == ")"){
             if(line == 0){
               output.unshift("");
@@ -64,12 +74,17 @@
             }
             output[line] = output[line].padEnd(i);
           }
+          // add character into array
           output[line] += inputString.substring(i, i + 1); 
         }
+
+        // write to output textarea
         document.getElementById("output").value = "";
         for(let i = 0; i < output.length; i++){
           document.getElementById("output").value += output[i] + "\n";
         }
+
+        // set size of output textarea
         document.getElementById("output").style.height = ((output.length + 3) * 18) + "px";
         document.getElementById("output").cols = inputLength + 3;
       }
